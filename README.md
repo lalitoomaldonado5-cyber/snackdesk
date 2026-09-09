@@ -178,18 +178,21 @@ El script usa solo claves públicas y sesiones de usuario. Prueba CRUD, pagos m�
 
 La estrategia y los permisos de cada tabla están en [Seguridad](docs/SECURITY.md). El script no comprueba la entrega de correo ni sustituye las pruebas de cookies y formularios en navegador. Los resultados reales de esta entrega están en [VALIDATION.md](docs/VALIDATION.md).
 
-## 10. Subir a GitHub
+## 10. Repositorio de GitHub
 
-1. Crea una cuenta de GitHub si no tienes.
-2. Crea un repositorio **privado y vacío**, por ejemplo `snackdesk`. No lo inicialices con otro README.
-3. En la terminal de este proyecto, usa tu URL real:
+El código está publicado en [lalitoomaldonado5-cyber/snackdesk](https://github.com/lalitoomaldonado5-cyber/snackdesk/tree/integration/supabase-validation), rama `integration/supabase-validation`. La rama principal contiene una presentación del proyecto; para revisar o desplegar esta entrega usa la rama de integración.
+
+La copia local está sincronizada con esa rama. El historial local anterior se conserva en `history/local-validation` y `main`. La publicación se hizo mediante el conector de GitHub, sin force push y sin borrar commits.
+
+Para descargar esta entrega en otra computadora:
 
 ```bash
-git remote add origin https://github.com/TU_USUARIO/snackdesk.git
-git push -u origin main
+git clone --branch integration/supabase-validation https://github.com/lalitoomaldonado5-cyber/snackdesk.git
+cd snackdesk
+npm ci
 ```
 
-GitHub puede pedirte iniciar sesión. Nunca pegues tokens en el README ni los agregues al repositorio. Si descargaste una copia sin historial Git, primero ejecuta `git init -b main`, `git add .` y `git commit -m "Base inicial de Snackdesk"`.
+Configura tu propio `.env.local` siguiendo las secciones anteriores. Los futuros `git push` desde terminal requieren iniciar sesión en GitHub; el acceso del conector no instala credenciales en tu terminal.
 
 ## 11. Desplegar después en Vercel
 
