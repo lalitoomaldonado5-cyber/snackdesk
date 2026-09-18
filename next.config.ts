@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  outputFileTracingIncludes: { "/*": ["./assets/pdf/*.woff"] },
   experimental: {
     useTypeScriptCli: false,
     workerThreads: true,

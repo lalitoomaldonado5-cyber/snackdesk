@@ -104,12 +104,14 @@ export function Modal({
   title,
   children,
   className = "",
+  closeLabel = "Cerrar menú",
 }: {
   open: boolean;
   onClose: () => void;
   title: string;
   children: ReactNode;
   className?: string;
+  closeLabel?: string;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   const id = useId();
@@ -130,7 +132,10 @@ export function Modal({
       className={`sd-modal sd-v2 ${className}`}
       aria-labelledby={id}
       aria-modal="true"
-      onCancel={onClose}
+      onCancel={(event) => {
+        event.preventDefault();
+        onClose();
+      }}
       onClose={onClose}
       onKeyDown={(event) => {
         if (event.key !== "Tab") return;
@@ -160,7 +165,7 @@ export function Modal({
             type="button"
             className="sd-icon-button"
             onClick={onClose}
-            aria-label="Cerrar menú"
+            aria-label={closeLabel}
           >
             <X size={20} />
           </button>

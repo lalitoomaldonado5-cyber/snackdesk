@@ -21,7 +21,6 @@ const slides = [
     alt: "Vasos de fruta fresca preparados para un evento",
     note: "Una presentación que se recuerda.",
     caption: "Tu siguiente capítulo",
-    future: true,
   },
   {
     title: "Tu negocio siempre claro.",
@@ -103,11 +102,6 @@ export function AuthCarousel() {
               </span>
               <h2>{slide.title}</h2>
               <p>{slide.text}</p>
-              {slide.future && (
-                <span className="sd-future-label">
-                  Cotizaciones · Próximamente
-                </span>
-              )}
             </div>
             <div className="sd-photo-note">
               <span className="sd-note-icon">

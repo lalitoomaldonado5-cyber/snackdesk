@@ -22,7 +22,7 @@ import { Brand } from "./design/brand";
 import { Dropdown, Modal } from "./design/primitives";
 
 const navigation = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/dashboard", label: "Inicio", icon: LayoutDashboard },
   { href: "/clients", label: "Clientes", icon: Users },
   { href: "/events", label: "Eventos", icon: CalendarDays },
   { href: "/payments", label: "Pagos", icon: Wallet },
@@ -122,8 +122,10 @@ export function AppShell({
   const routePath = preview
     ? pathname.replace(/^\/demo/, "") || "/dashboard"
     : pathname;
-  const current =
-    navigation.find((item) => routePath.startsWith(item.href)) || navigation[0];
+  const current = routePath.startsWith("/quotes")
+    ? { label: "Cotizaciones" }
+    : navigation.find((item) => routePath.startsWith(item.href)) ||
+      navigation[0];
   useEffect(() => {
     const media = window.matchMedia("(min-width: 768px)");
     const closeOnDesktop = () => {

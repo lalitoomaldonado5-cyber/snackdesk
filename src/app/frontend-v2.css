@@ -1555,3 +1555,86 @@
     scroll-behavior: auto !important;
   }
 }
+.sd-client-modal {
+  width: min(640px, calc(100% - 32px));
+}
+.sd-client-modal .sd-modal-body {
+  padding: 24px;
+}
+.sd-quote-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  align-items: start;
+  gap: 24px;
+}
+.sd-quote-fields {
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.sd-quote-fields h2 {
+  margin: 24px 0 18px;
+  font-size: 21px;
+}
+.sd-quote-fields h2:first-child {
+  margin-top: 0;
+}
+.sd-quote-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 85px 135px 42px;
+  gap: 10px;
+  align-items: end;
+  margin: 18px 0;
+}
+.sd-quote-item textarea {
+  min-height: 76px;
+}
+.sd-quote-item .button {
+  min-height: 44px;
+  margin-bottom: 2px;
+  padding: 10px;
+}
+.sd-quote-summary {
+  position: sticky;
+  top: 24px;
+  overflow-wrap: anywhere;
+}
+.sd-quote-summary h2 {
+  font-size: 32px;
+  line-height: 1.15;
+  margin: 18px 0 12px;
+}
+.sd-quote-summary dl {
+  margin: 30px 0;
+}
+.sd-quote-summary dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+}
+.sd-quote-summary dd {
+  margin: 0;
+}
+.sd-quote-total {
+  border-top: 1px solid #d9e0d7;
+  font-weight: 700;
+}
+@media (max-width: 1100px) {
+  .sd-quote-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sd-quote-summary {
+    position: static;
+    grid-row: 1;
+  }
+}
+@media (max-width: 600px) {
+  .sd-quote-item {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 42px;
+  }
+  .sd-quote-item > :first-child {
+    grid-column: 1 / -1;
+  }
+}

@@ -9,7 +9,24 @@ import {
 } from "@/lib/validation";
 import { validated, safeDbError, finish } from "@/lib/action-helpers";
 import { requireSession } from "@/lib/session";
-import type { ActionState } from "@/types/domain";
+import type { ActionState, Client } from "@/types/domain";
+import { revalidatePath } from "next/cache";
+
+export async function createClientInline(
+  form: FormData,
+): Promise<{ client?: Client; error?: string }> {
+  const v = await validated(form, clientSchema);
+  if (!v.ok) return { error: v.error };
+  const { supabase, businessId } = v.session;
+  const { data, error } = await supabase
+    .from("clients")
+    .insert({ ...v.values, business_id: businessId })
+    .select("*")
+    .single();
+  if (error) return { error: safeDbError(error) };
+  revalidatePath("/clients");
+  return { client: data };
+}
 export async function saveClient(
   _state: ActionState,
   form: FormData,

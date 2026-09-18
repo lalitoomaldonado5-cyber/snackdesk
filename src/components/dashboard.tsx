@@ -124,7 +124,6 @@ export function Dashboard({
     <div className="sd-v2 sd-dashboard">
       <div className="sd-dashboard-heading">
         <div>
-          <span className="sd-eyebrow">Tu negocio, de un vistazo</span>
           <h1>Hola, {data.profile.full_name.trim().split(/\s+/)[0]}.</h1>
           <p>
             Un buen día empieza en orden. <strong>{data.business.name}</strong>
@@ -139,6 +138,12 @@ export function Dashboard({
               year: "numeric",
             })}
           </span>
+          {!preview && (
+            <Link className="sd-button secondary" href="/quotes/new">
+              <Plus size={16} aria-hidden="true" />
+              Nueva cotización
+            </Link>
+          )}
           {!preview && (
             <Link className="sd-button primary" href="/events/new">
               <Plus size={16} aria-hidden="true" />
