@@ -80,28 +80,24 @@
 .sd-wordmark.light {
   color: var(--sd-cream);
 }
-.sd-brand-asset {
-  object-fit: contain;
+.sd-brand-logo {
+  position: relative;
+  display: block;
+  width: 164px;
   max-width: 100%;
-}
-.sd-brand-tile {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 208px;
-  max-width: 100%;
-  aspect-ratio: 3.6;
+  aspect-ratio: 96 / 59;
   overflow: hidden;
-  border-radius: 10px;
-  background: var(--sd-cream);
   flex-shrink: 0;
 }
-.sd-brand-tile img {
+.sd-brand-logo img {
+  /* Frame the artwork inside the original PNG's transparent margins. */
+  position: absolute;
+  left: -50%;
+  top: -13.5593%;
   display: block;
-  width: 118%;
+  width: 200%;
   max-width: none;
   height: auto;
-  flex-shrink: 0;
 }
 .sd-eyebrow {
   display: flex;
@@ -477,7 +473,7 @@
 .sd-editorial-brand {
   position: absolute;
   z-index: 2;
-  top: 36px;
+  top: 24px;
   left: 42px;
   display: flex;
   align-items: center;
