@@ -1,5 +1,7 @@
 # Validación de Snackdesk
 
+Este documento conserva el estado de la validación del 9 de septiembre de 2026. El estado actual del despliegue y las instrucciones operativas están en [DEPLOY.md](DEPLOY.md).
+
 Fecha: 9 de septiembre de 2026. Windows, Node 24, Next.js 16.3.4. Proyecto Supabase real conectado; pruebas con clave pública y sesiones de dos propietarios temporales.
 
 **Estado: PARCIAL.** La operación con cuentas confirmadas, la persistencia y el aislamiento pasan. Falta validar registro con entrega/confirmación de correo y completar la subida desde el selector del navegador. No se ha desplegado en Vercel.

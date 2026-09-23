@@ -22,7 +22,7 @@ export async function proxy(request: NextRequest) {
   });
   const { data, error } = await supabase.auth.getClaims();
   const privateRoute =
-    /^\/(dashboard|clients|events|payments|expenses|settings)(\/|$)/.test(
+    /^\/(dashboard|clients|events|payments|expenses|settings|quotes)(\/|$)/.test(
       request.nextUrl.pathname,
     );
   if (privateRoute && (error || !data?.claims)) {

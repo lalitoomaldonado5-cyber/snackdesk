@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   LayoutDashboard,
   Users,
@@ -10,22 +10,105 @@ import {
   Wallet,
   ReceiptText,
   Settings,
-  Layers3,
   ChevronRight,
+  ChevronDown,
   LogOut,
-  Sprout,
   Menu,
+  ArrowUpRight,
 } from "lucide-react";
 import { logout } from "@/services/auth";
 import { initials } from "@/lib/format";
+import { Brand } from "./design/brand";
+import { Dropdown, Modal } from "./design/primitives";
+
 const navigation = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/dashboard", label: "Inicio", icon: LayoutDashboard },
   { href: "/clients", label: "Clientes", icon: Users },
   { href: "/events", label: "Eventos", icon: CalendarDays },
   { href: "/payments", label: "Pagos", icon: Wallet },
   { href: "/expenses", label: "Gastos", icon: ReceiptText },
   { href: "/settings", label: "Configuración", icon: Settings },
 ];
+type ShellProps = {
+  businessName: string;
+  userName: string;
+  role: string;
+  logoSrc: string | null;
+  children: React.ReactNode;
+  preview?: boolean;
+};
+function Navigation({
+  businessName,
+  logoSrc,
+  preview,
+  routePath,
+  close,
+}: Pick<ShellProps, "businessName" | "logoSrc" | "preview"> & {
+  routePath: string;
+  close?: () => void;
+}) {
+  return (
+    <div className="sd-navigation">
+      <Link
+        href={preview ? "/demo" : "/dashboard"}
+        className="sd-sidebar-brand"
+        onClick={close}
+      >
+        <Brand />
+      </Link>
+      <div className="sd-workspace">
+        <div className="sd-workspace-icon">
+          {logoSrc ? (
+            <Image
+              unoptimized
+              src={logoSrc}
+              alt="Logo del negocio"
+              width={35}
+              height={35}
+            />
+          ) : (
+            initials(businessName)
+          )}
+        </div>
+        <div>
+          <strong title={businessName}>{businessName}</strong>
+          <small>Tu espacio de trabajo</small>
+        </div>
+      </div>
+      <span className="sd-nav-label">MI NEGOCIO</span>
+      <nav aria-label="Navegación principal" className="sd-nav-links">
+        {navigation.map((item) => {
+          const active = routePath.startsWith(item.href);
+          return (
+            <Link
+              key={item.href}
+              href={
+                preview
+                  ? `/demo${item.href === "/dashboard" ? "" : item.href}`
+                  : item.href
+              }
+              className={`sd-nav-item ${active ? "active" : ""} ${item.href === "/settings" ? "settings" : ""}`}
+              aria-current={active ? "page" : undefined}
+              onClick={close}
+            >
+              <item.icon size={18} strokeWidth={1.5} aria-hidden="true" />
+              {item.label}
+              {active && <ChevronRight size={13} aria-hidden="true" />}
+            </Link>
+          );
+        })}
+      </nav>
+      <div className="sd-sidebar-footer">
+        <p>
+          El orden detrás
+          <br />
+          de cada celebración.
+        </p>
+        <small>Tu negocio, en orden.</small>
+      </div>
+    </div>
+  );
+}
 export function AppShell({
   businessName,
   userName,
@@ -33,144 +116,112 @@ export function AppShell({
   logoSrc,
   children,
   preview = false,
-}: {
-  businessName: string;
-  userName: string;
-  role: string;
-  logoSrc: string | null;
-  children: React.ReactNode;
-  preview?: boolean;
-}) {
+}: ShellProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const routePath = preview
     ? pathname.replace(/^\/demo/, "") || "/dashboard"
     : pathname;
-  const current =
-    navigation.find((n) => routePath.startsWith(n.href)) || navigation[0];
+  const current = routePath.startsWith("/quotes")
+    ? { label: "Cotizaciones" }
+    : navigation.find((item) => routePath.startsWith(item.href)) ||
+      navigation[0];
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 768px)");
+    const closeOnDesktop = () => {
+      if (media.matches) setOpen(false);
+    };
+    media.addEventListener("change", closeOnDesktop);
+    return () => media.removeEventListener("change", closeOnDesktop);
+  }, []);
   return (
-    <div className="app-shell">
-      <button
-        aria-label="Cerrar menú"
-        className={`mobile-scrim ${open ? "open" : ""}`}
-        onClick={() => setOpen(false)}
-      />
-      <aside
-        id="sidebar"
-        className={`sidebar ${open ? "open" : ""}`}
-        onKeyDown={(event) => {
-          if (event.key === "Escape") setOpen(false);
-        }}
-      >
-        <Link href={preview ? "/demo" : "/dashboard"} className="brand">
-          <span className="brand-mark">
-            <Layers3 size={21} />
-          </span>
-          snackdesk<span className="brand-dot">.</span>
-        </Link>
-        <div className="workspace-tag">
-          <div className="workspace-avatar">
-            {logoSrc ? (
-              <Image
-                unoptimized
-                src={logoSrc}
-                alt="Logo del negocio"
-                width={33}
-                height={33}
-              />
-            ) : (
-              initials(businessName)
-            )}
-          </div>
-          <div>
-            <strong title={businessName}>{businessName}</strong>
-            <small>Mi espacio de trabajo</small>
-          </div>
-        </div>
-        <span className="nav-label">PRINCIPAL</span>
-        <nav aria-label="Navegación principal">
-          {navigation.map((n) => (
-            <Link
-              href={
-                preview
-                  ? `/demo${n.href === "/dashboard" ? "" : n.href}`
-                  : n.href
-              }
-              key={n.href}
-              className={`nav-item ${current.href === n.href ? "active" : ""}`}
-              aria-current={current.href === n.href ? "page" : undefined}
-              onClick={() => setOpen(false)}
-            >
-              <n.icon size={17} strokeWidth={1.7} />
-              {n.label}
-              {current.href === n.href && (
-                <ChevronRight className="nav-arrow" size={13} />
-              )}
-            </Link>
-          ))}
-        </nav>
-        <div className="sidebar-bottom">
-          <div className="sidebar-note">
-            <Sprout size={19} color="#869c7c" />
-            <strong>Pequeños detalles. Grandes eventos.</strong>
-            <p>Tu negocio en orden, para enfocarte en lo que mejor haces.</p>
-          </div>
-          <div className="version">
-            Snackdesk · MVP<span>v0.1</span>
-          </div>
-        </div>
+    <div className="app-shell shell-v2">
+      <a href="#main-content" className="sd-skip">
+        Saltar al contenido
+      </a>
+      <aside className="sd-sidebar">
+        <Navigation
+          businessName={businessName}
+          logoSrc={logoSrc}
+          preview={preview}
+          routePath={routePath}
+        />
       </aside>
-      <header className="topbar">
+      <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Tu espacio de trabajo"
+        className="sd-drawer"
+      >
+        <Navigation
+          businessName={businessName}
+          logoSrc={logoSrc}
+          preview={preview}
+          routePath={routePath}
+          close={() => setOpen(false)}
+        />
+      </Modal>
+      <header className="sd-topbar">
         <button
+          type="button"
           aria-label="Abrir menú"
           aria-expanded={open}
-          aria-controls="sidebar"
-          className="icon-button mobile-toggle"
-          onClick={() => setOpen(!open)}
+          aria-haspopup="dialog"
+          className="sd-icon-button sd-mobile-toggle"
+          onClick={() => setOpen(true)}
         >
-          <Menu size={19} />
+          <Menu size={21} />
         </button>
-        <div className="breadcrumb">
+        <div className="sd-breadcrumb">
           <span>{businessName}</span>
-          <ChevronRight size={12} />
+          <ChevronRight size={12} aria-hidden="true" />
           <strong>{current.label}</strong>
         </div>
-        <div className="user-menu">
-          <div className="user-avatar">{initials(userName)}</div>
-          <div>
-            <div className="user-name">{userName}</div>
-            <div className="user-role">
-              {role === "owner" ? "Propietario" : "Miembro"}
-            </div>
-          </div>
+        <Dropdown
+          label={
+            <>
+              <span className="sd-user-avatar" aria-hidden="true">
+                {initials(userName)}
+              </span>
+              <span className="sd-user-details">
+                <span className="sd-user-name">{userName}</span>
+                <span className="sd-user-role">
+                  {role === "owner" ? "Propietario" : "Miembro"}
+                </span>
+              </span>
+              <span className="sr-only">Opciones de cuenta de {userName}</span>
+              <ChevronDown size={13} aria-hidden="true" />
+            </>
+          }
+        >
+          <Link href={preview ? "/demo/settings" : "/settings"}>
+            <Settings size={16} />
+            Configuración
+          </Link>
           {preview ? (
-            <Link
-              href="/setup"
-              className="icon-button"
-              aria-label="Configurar aplicación"
-            >
-              <LogOut size={15} />
+            <Link href="/login">
+              <ArrowUpRight size={16} />
+              Ir a mi cuenta
             </Link>
           ) : (
             <form action={logout}>
-              <button
-                className="icon-button"
-                aria-label="Cerrar sesión"
-                title="Cerrar sesión"
-              >
-                <LogOut size={15} />
+              <button type="submit">
+                <LogOut size={16} />
+                Cerrar sesión
               </button>
             </form>
           )}
-        </div>
+        </Dropdown>
       </header>
       {preview && (
-        <div className="preview-banner">
-          Datos de ejemplo · Esta vista no guarda cambios.
-          <Link href="/setup">Conectar mi negocio</Link>
+        <div className="sd-preview-banner">
+          Vista de ejemplo · Los datos son ficticios y no se guardan cambios.
+          <Link href="/login">Ir a mi cuenta</Link>
         </div>
       )}
-      <main className="content">{children}</main>
+      <main id="main-content" tabIndex={-1} className="content">
+        {children}
+      </main>
     </div>
   );
 }

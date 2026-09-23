@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "@fontsource/instrument-serif/latin-400.css";
+import "@fontsource/instrument-serif/latin-400-italic.css";
+import "@fontsource-variable/manrope";
+import "./frontend-v2.css";
 export const metadata: Metadata = {
   title: {
     default: "Snackdesk · Tu negocio, en orden",
